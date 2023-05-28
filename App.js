@@ -1,25 +1,18 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TextInput, Text } from 'react-native';
-import { useState } from 'react';
 import DatePicker from 'react-native-datepicker';
 
 import Header from './components/Header';
 import TextList from './components/TextList';
 import InputBtn from './components/InputBtn';
 
-//기본 앱에서 제목 및 날짜 기록, DatePicker 추가
-//터치 시 취소선으로 완료된 리스트 표시가능, 길게 터치 시 리스트 삭제
-
 export default function App() {
   const [myTitle, setMyTitle] = useState('제목을 입력하세요.');
   const [todoTitle, setTodoTitle] = useState(['제목 1', '제목 2']);
   const [myText, setMyText] = useState('내용을 입력하세요.');
   const [todoText, setTodoText] = useState(['여기에 내용이', '표시됩니다']);
-  const [myDate, setMyDate] = useState(new Date());
-  const [todoDate, setTodoDate] = useState([
-    new Date('2023-01-01').setHours(0, 0, 0, 0),
-    new Date('2023-01-02').setHours(0, 0, 0, 0),
-  ]);
+  const [myDate, setMyDate] = useState(new Date().toISOString().split('T')[0]);
+  const [todoDate, setTodoDate] = useState(['2023-01-01', '2023-01-02']);
 
   const onChangeTitle = (text) => {
     setMyTitle(text);
@@ -30,9 +23,7 @@ export default function App() {
   };
 
   const onAddTextInput = () => {
-    const formattedDate = `${myDate.getFullYear()}-${String(
-      myDate.getMonth() + 1
-    ).padStart(2, '0')}-${String(myDate.getDate()).padStart(2, '0')}`;
+    const formattedDate = `${myDate}`;
 
     setTodoTitle([...todoTitle, myTitle]);
     setTodoText([...todoText, myText]);
@@ -40,6 +31,7 @@ export default function App() {
 
     setMyTitle('제목을 입력하세요.');
     setMyText('내용을 입력하세요.');
+    setMyDate(new Date().toISOString().split('T')[0]);
   };
 
   const onTextDelete = (position) => {
@@ -77,8 +69,8 @@ export default function App() {
       <DatePicker
         style={styles.datePick}
         date={myDate}
-        onDateChange={(myDate) => {
-          setMyDate(myDate);
+        onDateChange={(date) => {
+          setMyDate(date);
         }}
         mode="date"
         format="YYYY-MM-DD"
@@ -92,14 +84,14 @@ export default function App() {
 
       <InputBtn add={onAddTextInput} />
 
-      <ScrollView style={{ width: '100%' }} bounce={true} />
-
-      <TextList
-        txt={todoTitle}
-        txt2={todoText}
-        txt3={todoDate}
-        delete={onTextDelete}
-      />
+      <ScrollView style={{ width: '100%' }} bounce={true}>
+        <TextList
+          txt={todoTitle}
+          txt2={todoText}
+          txt3={todoDate}
+          delete={onTextDelete}
+        />
+      </ScrollView>
     </View>
   );
 }
