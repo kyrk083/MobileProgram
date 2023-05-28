@@ -81,7 +81,7 @@ export default function App() {
           setMyDate(myDate);
         }}
         mode="date"
-        format="YYYY. MM. DD"
+        format="YYYY-MM-DD"
         confirmBtnText="확인"
         cancelBtnText="취소"
         customStyles={{
